@@ -4,12 +4,13 @@ Plan mountaineering / hiking / climbing trips, using a map as canvas, dropping m
 
 ## TODO
 
-- [ ] Add functionality to add new marker, with draggable enabled
-- [ ] Add sveltekit backend with sqlite
+- [x] Add functionality to add new marker, with draggable enabled
+- [x] Add sveltekit backend with sqlite
     - https://hartenfeller.dev/blog/sveltekit-with-sqlite
     - https://hartenfeller.dev/blog/sveltekit-diy-authentication-authorization
     - Use [this lib](https://github.com/WiseLibs/better-sqlite3) as the sqlite driver, that it's baked in with foreign keys enabled
 - [ ] Check out some helper lib for better styling. Maybe [this](https://bulma.io/) which I don't know.
+- [ ] Add ability to change map layer, and opacity of it
 
 ## Creating a project
 
