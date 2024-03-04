@@ -84,10 +84,7 @@
 			on:click-reset={resetMapView}
 			on:update-default-loc={updateInitialView}
 			on:add-marker={() => {
-				markersStore.addNewMarker({
-					lat: initialView.lat,
-					lng: initialView.lng,
-				});
+				markersStore.addNewMarker(map.getCenter());
 			}}
 		/>
 	</Control>
@@ -113,6 +110,7 @@
 
 				<Popup>
 					<div class="popup">
+						<p style:font-weight='bold'>{marker.name}</p>
 						<button
 							on:click={() =>
 								dispatch("toggle-marker-comments", {
@@ -134,7 +132,6 @@
 
 <style>
 	.popup {
-		padding: 5px;
 		display: flex;
 		justify-content: center;
 		align-items: center;

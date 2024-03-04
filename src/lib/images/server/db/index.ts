@@ -14,19 +14,23 @@ export function getMaps(limit = 51): Map[] {
 }
 
 interface DBMarker {
+    marker_id: number;
+    name?: string;
     lat: number;
     lng: number;
 };
 
 export function getMarkersForMap(id: number): MarkerData[] {
     const sql = `
-    select lat, lng from markers where map_id = $id
+    select marker_id, name, lat, lng from markers where map_id = $id
     `;
     const stmnt = db.prepare(sql);
     const rows = stmnt.all({ id });
     const dbMarkers = rows as DBMarker[];
-    return dbMarkers.map(({ lat, lng }) => ({
-        latlng: { lat, lng },
+    return dbMarkers.map((dbm) => ({
+        id: dbm.marker_id,
+        name: dbm.name || '',
+        latlng: { lat: dbm.lat, lng: dbm.lng },
         comments: []
     })) as MarkerData[];
 }

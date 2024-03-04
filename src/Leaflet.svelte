@@ -28,12 +28,16 @@
 		map = L.map(node).on('zoom', (e) => dispatch('zoom', e));
 		map.setView(view, zoom);
 
-		L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-			attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
-          &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
-			subdomains: 'abcd',
-			maxZoom: 14
-		}).addTo(map);
+		// https://leaflet-extras.github.io/leaflet-providers/preview/
+		let esriWorldImaginery = L.tileLayer(
+			'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+			{
+				attribution:
+					'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+				opacity: 0.4,
+			}
+		);
+		esriWorldImaginery.addTo(map);
 
 		return {
 			destroy() {

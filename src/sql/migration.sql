@@ -13,6 +13,7 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS markers (
     marker_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
     lat FLOAT NOT NULL,
     lng FLOAT NOT NULL,
     map_id INTEGER NOT NULL,
@@ -22,8 +23,8 @@ CREATE TABLE IF NOT EXISTS markers (
 );
 
 -- insert test markers into db
-INSERT INTO markers (lat, lng, map_id, created_at, last_modified)
+INSERT INTO markers (name, lat, lng, map_id, created_at, last_modified)
 VALUES
-    (-49.41005, -73.0083, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (-49.31483, -72.9416, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (-49.4332, -72.8822, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    ('laguna tempanos', -49.41005, -73.0083, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('laguna sucia', -49.31483, -72.9416, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('pueblo', -49.4332, -72.8822, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

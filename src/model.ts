@@ -5,6 +5,8 @@ export interface Map {
 }
 
 export interface MarkerData {
+  id: number,
+  name: string,
   latlng: LatLngLiteral
   comments: string[]
 }
