@@ -1,15 +1,15 @@
 <script lang="ts">
-	import type {Marker, LatLngExpression} from 'leaflet';
+	import type { Marker, LatLngExpression } from 'leaflet';
 	import type { LayerGroupProvider } from './types';
-	import L from "leaflet";
-	import { getContext, setContext } from "svelte";
-	import { createEventDispatcher } from "svelte";
+	import L from 'leaflet';
+	import { getContext, setContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher<{
-		'click': object,
+		click: object;
 		'marker-dragend': {
-			latlng: L.LatLng
-		},
+			latlng: L.LatLng;
+		};
 	}>();
 
 	let classNames: string = '';
@@ -33,24 +33,27 @@
 		}
 	}
 
-	const layerGroup = (getContext("layerGroup") as LayerGroupProvider)();
-	setContext("layer", () => marker);
+	const layerGroup = (getContext('layerGroup') as LayerGroupProvider)();
+	setContext('layer', () => marker);
 
 	function createMarker(markerElement: HTMLDivElement) {
 		let icon = L.divIcon({
 			html: markerElement,
-			className: "map-marker",
-			iconSize: L.point(width, height),
+			className: 'map-marker',
+			iconSize: L.point(width, height)
 		});
-		marker = L.marker(latLng, { icon , draggable})
+		marker = L.marker(latLng, { icon, draggable })
 			.addTo(layerGroup)
-			.on("dragend", function (event) {
+			.on('dragend', function (event) {
 				let marker = event.target;
 				let position = marker.getLatLng();
 				dispatch('marker-dragend', {
-					latlng: position,
-				})
+					latlng: position
+				});
 			});
+		marker.on('mouseover', () => {
+			marker?.openTooltip();
+		});
 
 		return {
 			destroy() {
@@ -58,13 +61,13 @@
 					marker.remove();
 					marker = undefined;
 				}
-			},
+			}
 		};
 	}
 </script>
 
 <div class="hidden">
-	<div use:createMarker class={classNames} on:click={() => dispatch("click")}>
+	<div use:createMarker class={classNames} on:click={() => dispatch('click')}>
 		{#if marker}
 			<slot />
 		{/if}

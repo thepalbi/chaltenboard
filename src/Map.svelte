@@ -11,26 +11,31 @@
 	Thanks to heroicons.dev for the icons used here.
 	*/
 
-	import type { Map } from "leaflet";
-	import Leaflet from "./Leaflet.svelte";
-	import Control from "./Control.svelte";
-	import Popup from "./Popup.svelte";
-	import MapToolbar from "./MapToolbar.svelte";
+	import type { Map } from 'leaflet';
+	import Leaflet from './Leaflet.svelte';
+	import Control from './Control.svelte';
+	import Popup from './Popup.svelte';
+	import MapToolbar from './MapToolbar.svelte';
 
-	import { createEventDispatcher, getContext } from "svelte";
-	import DraggableMarker from "./DraggableMarker.svelte";
-	import Icon from "./components/Icon.svelte";
-	import type {MarkerStore} from "./store";
+	import { createEventDispatcher, getContext } from 'svelte';
+	import DraggableMarker from './DraggableMarker.svelte';
+	import Icon from './components/Icon.svelte';
+	import type { MarkerStore } from './store';
 	import { page } from '$app/stores';
+	import Tooltip from './Tooltip.svelte';
 
 	$: {
-		console.log('lat lng in url', $page.url.searchParams.get('lat'), $page.url.searchParams.get('lng'));
+		console.log(
+			'lat lng in url',
+			$page.url.searchParams.get('lat'),
+			$page.url.searchParams.get('lng')
+		);
 	}
 
-	const markersStore = getContext("markerStore") as MarkerStore;
+	const markersStore = getContext('markerStore') as MarkerStore;
 
 	const dispatch = createEventDispatcher<{
-		"toggle-marker-comments": {
+		'toggle-marker-comments': {
 			markerID: number;
 		};
 	}>();
@@ -44,8 +49,8 @@
 	});
 
 	let initialView = {
-		lat: -49.4100,
-		lng: -73.0083,
+		lat: -49.41,
+		lng: -73.0083
 	};
 	let initialZoom = 11;
 
@@ -100,31 +105,25 @@
 					markersStore.updateMarkerPosition(i, event.detail.latlng);
 				}}
 			>
-				<Icon
-					name="map-pin"
-					size="2em"
-					strokeWidth="2px"
-					stroke="black"
-					translate={["0", "-10px"]}
+				<Icon name="map-pin" size="2em" strokeWidth="2px" stroke="black" translate={['0', '-10px']}
 				></Icon>
 
 				<Popup>
 					<div class="popup">
-						<p style:font-weight='bold'>{marker.name}</p>
 						<button
 							on:click={() =>
-								dispatch("toggle-marker-comments", {
-									markerID: i,
+								dispatch('toggle-marker-comments', {
+									markerID: i
 								})}>Toggle comments</button
 						>
-						<button
-							on:click={() =>
-								markerInstances[i]?.toggleDraggable()}
-						>
+						<button on:click={() => markerInstances[i]?.toggleDraggable()}>
 							Toggle draggable
 						</button>
 					</div>
 				</Popup>
+				<Tooltip>
+					<p style:font-weight="bold">{marker.name}</p>
+				</Tooltip>
 			</DraggableMarker>
 		{/each}
 	{/if}
