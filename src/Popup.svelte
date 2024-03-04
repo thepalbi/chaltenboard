@@ -1,0 +1,57 @@
+<script lang="ts">
+  import type { Popup } from "leaflet";
+  import L from "leaflet";
+  import { getContext } from "svelte";
+  import type { LayerGroupProvider } from "./types";
+  let classNames: string = "";
+  export { classNames as class };
+  export let popup: Popup | undefined = undefined;
+  let showContents = false;
+  let popupOpen = false;
+  const layer = (getContext("layer") as LayerGroupProvider)();
+
+  function createPopup(popupElement: HTMLDivElement) {
+    popup = L.popup().setContent(popupElement);
+    layer.bindPopup(popup, {
+      maxWidth: 200,
+      maxHeight: 200,
+    });
+    layer.on("popupopen", () => {
+      popupOpen = true;
+      showContents = true;
+    });
+    layer.on("popupclose", () => {
+      popupOpen = false;
+      // Wait for the popup to completely fade out before destroying it.
+      // Otherwise the fade out looks weird as the contents disappear too early.
+      setTimeout(() => {
+        if (!popupOpen) {
+          showContents = false;
+        }
+      }, 500);
+    });
+    return {
+      destroy() {
+        if (popup) {
+          layer.unbindPopup();
+          popup.remove();
+          popup = undefined;
+        }
+      },
+    };
+  }
+</script>
+
+<div class="hidden">
+  <div use:createPopup class={classNames}>
+    {#if showContents}
+      <slot />
+    {/if}
+  </div>
+</div>
+
+<style>
+  .leaflet-popup-content {
+    margin: 0 !important;
+  }
+</style>
