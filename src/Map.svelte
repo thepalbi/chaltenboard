@@ -21,6 +21,11 @@
 	import DraggableMarker from "./DraggableMarker.svelte";
 	import Icon from "./components/Icon.svelte";
 	import type {MarkerStore} from "./store";
+	import { page } from '$app/stores';
+
+	$: {
+		console.log('lat lng in url', $page.url.searchParams.get('lat'), $page.url.searchParams.get('lng'));
+	}
 
 	const markersStore = getContext("markerStore") as MarkerStore;
 
@@ -39,10 +44,10 @@
 	});
 
 	let initialView = {
-		lat: 39.8283,
-		lng: -98.5795,
+		lat: -49.4100,
+		lng: -73.0083,
 	};
-	let initialZoom = 5;
+	let initialZoom = 11;
 
 	function updateInitialView() {
 		initialView = map.getCenter();
@@ -72,7 +77,7 @@
 	crossorigin=""
 />
 
-<Leaflet bind:map view={initialView} zoom={4}>
+<Leaflet bind:map view={initialView} zoom={initialZoom}>
 	<Control position="bottomleft">
 		<MapToolbar
 			bind:eye
