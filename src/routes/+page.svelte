@@ -7,6 +7,6 @@
 <h1>Chaltenboard</h1>
 <ul>
     {#each data.maps as m}
-        <li>{m.name}</li>
+        <li><a href="/map">{m.name}</a></li>
     {/each}
 </ul>
