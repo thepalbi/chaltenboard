@@ -1,22 +1,21 @@
-import type { LatLngLiteral } from 'leaflet'
-import { writable } from 'svelte/store'
-import type { MarkerData } from './model'
+import type { LatLngLiteral } from 'leaflet';
+import { writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
+import type { MarkerData } from './model';
 
-const testLocation: LatLngLiteral[] = [
-  { lat: 29.8283, lng: -96.5796 },
-  { lat: 39.8283, lng: -98.5795 },
-  { lat: 49.8283, lng: -100.5795 },
-  { lat: 59.8283, lng: -102.5795 },
-  { lat: 69.8283, lng: -104.5795 },
-];
+export interface MarkerStore extends Readable<MarkerData[]> {
+  set: (markers: MarkerData[]) => void;
+  addNewMarker: (latlng: LatLngLiteral) => void;
+  updateMarkerPosition: (index: number, latlng: LatLngLiteral) => void;
+  addCommentToMaker: (index: number, comment: string) => void;
+};
 
-const createMarkersStore = () => {
-  const { subscribe, update } = writable<MarkerData[]>(
-    testLocation.map(latlng => ({ latlng, comments: [] }))
-  )
+export const createMarkersStore = () => {
+  const { subscribe, set, update } = writable<MarkerData[]>();
 
   return {
     subscribe,
+    set: (markers: MarkerData[]) => set(markers),
     addNewMarker: (latlng: LatLngLiteral) =>
       update(markers => [...markers, { latlng, comments: [] }]),
     updateMarkerPosition: (index: number, latlng: LatLngLiteral) =>
@@ -34,5 +33,3 @@ const createMarkersStore = () => {
       })
   }
 }
-
-export const markersStore = createMarkersStore()

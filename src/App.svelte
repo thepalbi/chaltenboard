@@ -3,7 +3,14 @@
 	import CommentForm from "./CommentForm.svelte";
 	import Map from "./Map.svelte";
 	import Sidebar from "./Sidebar.svelte";
-	import { markersStore } from "./store";
+	import type { MarkerData } from "./model";
+	import { createMarkersStore } from "./store";
+	import { setContext } from "svelte";
+
+	export let markers: MarkerData[];
+	const markerStore = createMarkersStore();
+	setContext("markerStore", markerStore);
+	$: markerStore.set(markers);
 
 	let showSidebar = false;
 	let currentSelectedMarkerID: number | undefined = undefined;
@@ -11,7 +18,7 @@
 
 	$: {
 		if (currentSelectedMarkerID !== undefined) {
-			comments = $markersStore[currentSelectedMarkerID].comments;
+			comments = $markerStore[currentSelectedMarkerID].comments;
 		}
 	}
 </script>
@@ -21,7 +28,7 @@
 		<div class="sidebar-main-content">
 			{#if currentSelectedMarkerID !== undefined}
 				<h2>Comments for {currentSelectedMarkerID}</h2>
-				<p>lat: {$markersStore[currentSelectedMarkerID].latlng.lat}, lng: {$markersStore[currentSelectedMarkerID].latlng.lng}</p>
+				<p>lat: {$markerStore[currentSelectedMarkerID].latlng.lat}, lng: {$markerStore[currentSelectedMarkerID].latlng.lng}</p>
 			{/if}
 			<CommentList bind:comments={comments}></CommentList>
 		</div>
@@ -29,7 +36,7 @@
 			<CommentForm
 				onSubmit={(text) => {
 					if (currentSelectedMarkerID !== undefined) {
-						markersStore.addCommentToMaker(currentSelectedMarkerID, text);
+						markerStore.addCommentToMaker(currentSelectedMarkerID, text);
 					}
 				}}
 			/>

@@ -17,11 +17,13 @@
 	import Popup from "./Popup.svelte";
 	import MapToolbar from "./MapToolbar.svelte";
 
-	import { markersStore } from "./store";
-
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, getContext } from "svelte";
 	import DraggableMarker from "./DraggableMarker.svelte";
 	import Icon from "./components/Icon.svelte";
+	import type {MarkerStore} from "./store";
+
+	const markersStore = getContext("markerStore") as MarkerStore;
+
 	const dispatch = createEventDispatcher<{
 		"toggle-marker-comments": {
 			markerID: number;
